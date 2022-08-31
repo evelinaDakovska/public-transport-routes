@@ -1,13 +1,17 @@
 import React from "react";
-import "./App.css";
-import MapComponent from "./components/mapComponent";
+import styles from "./App.module.scss";
+import HeaderComponent from "./components/headerComponent/headerComponent";
+import LinesMenuComponent from "./components/linesMenuComponent/linesMenuComponent";
+import MapComponent from "./components/mapComponent/mapComponent";
 
 function App() {
   return (
     <>
-      <MapComponent />
-      {/*       <button onClick={locateHandler}>Show Current Location</button>;
-       */}{" "}
+      <HeaderComponent />
+      <div className={styles.main}>
+        <LinesMenuComponent />
+        <MapComponent />
+      </div>
     </>
   );
 }

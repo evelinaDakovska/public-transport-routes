@@ -1,33 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Marker, Popup, useMap } from "react-leaflet";
+import { useSelector } from "react-redux";
+import { getStopPosition } from "../../slices/dataSlice";
 
-export const LocationMarker = ({
-  isLocationClicked,
-  setIsLocationClicked,
-}: {
-  isLocationClicked: boolean;
-  setIsLocationClicked: any;
-}) => {
-  const [position, setPosition] = useState<{
-    lat: number;
-    lng: number;
-  }>();
-
+export const LocationMarker = () => {
+  const statePosition = useSelector(getStopPosition);
   const map = useMap();
 
   useEffect(() => {
-    if (isLocationClicked) {
-      map.locate().on("locationfound", function (e) {
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, map.getZoom());
-      });
-      setIsLocationClicked(false);
-    }
-  }, [map, isLocationClicked, setIsLocationClicked]);
+    map.flyTo(statePosition, map.getZoom());
+  }, [map, statePosition]);
 
-  return position ? (
-    <Marker position={position}>
-      <Popup>You are here.</Popup>
+  return statePosition ? (
+    <Marker position={statePosition}>
+      <Popup>Stop</Popup>
     </Marker>
   ) : null;
 };

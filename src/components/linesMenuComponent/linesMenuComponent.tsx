@@ -3,12 +3,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TreeItem from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getFullData } from "../../slices/dataSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getFullData, setStopPosition } from "../../slices/dataSlice";
 import styles from "./linesMenuComponent.module.scss";
 import { v4 as uuidv4 } from "uuid";
 
 const LinesMenuComponent = () => {
+  const dispatch = useDispatch();
   const [transportTypes, setTransportTypes] = useState<
     Record<string, string[]>
   >({});
@@ -31,6 +32,7 @@ const LinesMenuComponent = () => {
 
   const onStopClick = (currentRoute: any) => {
     console.log(currentRoute.location);
+    dispatch(setStopPosition(currentRoute.location));
   };
 
   return (

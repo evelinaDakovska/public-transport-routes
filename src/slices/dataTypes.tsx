@@ -9,7 +9,7 @@ interface SegmentsInterface {
 
 export interface LocationInterface {
   lat: number;
-  lon: number;
+  lng: number;
 }
 
 interface StopsInterface {
@@ -31,6 +31,10 @@ interface RoutesInterface {
   name: string;
 }
 
+export interface InitialState {
+  data: DataState[];
+  stopPosition: LocationInterface;
+}
 export interface DataState {
   line: string;
   routes: RoutesInterface[];

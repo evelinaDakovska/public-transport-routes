@@ -1,11 +1,19 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Polyline,
+  Popup,
+  TileLayer,
+} from "react-leaflet";
 import { useSelector } from "react-redux";
-import { getStopPosition } from "../../slices/dataSlice";
+import { getPolylineData, getStopPosition } from "../../slices/dataSlice";
 import { LocationMarker } from "./currentLocationMarker";
 import styles from "./mapComponent.module.scss";
 
 const MapComponent = () => {
   const position = useSelector(getStopPosition);
+  const polylineData = useSelector(getPolylineData);
+  console.log(polylineData);
 
   return (
     <div className={styles.mapContainer}>
@@ -26,8 +34,12 @@ const MapComponent = () => {
             </Popup>
           </Marker>
         )}
-        {/*         <Polyline pathOptions={{ color: "lime" }} positions={position} />
-         */}{" "}
+        {polylineData.length > 0 && (
+          <Polyline
+            pathOptions={{ color: "lime" }}
+            positions={polylineData[0]}
+          />
+        )}
         <LocationMarker />
       </MapContainer>
     </div>

@@ -4,9 +4,14 @@ import TreeItem from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFullData, setStopPosition } from "../../slices/dataSlice";
+import {
+  getFullData,
+  setPolylineData,
+  setStopPosition,
+} from "../../slices/dataSlice";
 import styles from "./linesMenuComponent.module.scss";
 import { v4 as uuidv4 } from "uuid";
+import Checkbox from "@mui/material/Checkbox";
 
 const LinesMenuComponent = () => {
   const dispatch = useDispatch();
@@ -34,6 +39,9 @@ const LinesMenuComponent = () => {
     console.log(currentRoute.location);
     dispatch(setStopPosition(currentRoute.location));
   };
+  const onCheckBoxChanged = (routeId: number) => {
+    dispatch(setPolylineData(routeId));
+  };
 
   return (
     <div className={styles.linesMenu}>
@@ -48,7 +56,7 @@ const LinesMenuComponent = () => {
               <TreeItem key={uuidv4()} nodeId={lineData} label={lineData}>
                 {data
                   ?.filter((c) => c.line === lineData)
-                  ?.map((line) => {
+                  ?.map(() => {
                     const currentData = data.find((c) => c.line === lineData);
                     const c = currentData?.routes;
                     return c?.map((routes) => {
@@ -56,7 +64,14 @@ const LinesMenuComponent = () => {
                         <TreeItem
                           key={uuidv4()}
                           nodeId={routes.name}
-                          label={routes.name}
+                          label={
+                            <div>
+                              <Checkbox
+                                onChange={() => onCheckBoxChanged(routes.id)}
+                              />
+                              {routes.name}
+                            </div>
+                          }
                         >
                           {routes.stops.map((currentRoute, i) => (
                             <TreeItem

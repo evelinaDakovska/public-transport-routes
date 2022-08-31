@@ -34,6 +34,7 @@ interface RoutesInterface {
 export interface InitialState {
   data: DataState[];
   stopPosition: LocationInterface;
+  polylineData: LocationInterface[][][];
 }
 export interface DataState {
   line: string;

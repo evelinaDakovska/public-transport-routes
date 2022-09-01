@@ -30,12 +30,16 @@ interface RoutesInterface {
   segments: SegmentsInterface[];
   name: string;
 }
-
+export interface stopDataInterface {
+  [key: string]: LocationInterface;
+}
 export interface InitialState {
   data: DataState[];
-  stopPosition: LocationInterface;
-  polylineData: LocationInterface[][][];
+  stopPosition: stopDataInterface;
+  polylineData: LocationInterface[][];
+  multipleStopsData: stopDataInterface;
 }
+
 export interface DataState {
   line: string;
   routes: RoutesInterface[];

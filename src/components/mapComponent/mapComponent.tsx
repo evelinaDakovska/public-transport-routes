@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   MapContainer,
   Marker,
@@ -6,41 +7,53 @@ import {
   TileLayer,
 } from "react-leaflet";
 import { useSelector } from "react-redux";
-import { getPolylineData, getStopPosition } from "../../slices/dataSlice";
-import { LocationMarker } from "./currentLocationMarker";
+import { v4 as uuidv4 } from "uuid";
+import {
+  getMultipleStopsData,
+  getPolylineData,
+  getStopPosition,
+} from "../../slices/dataSlice";
+import { LocationInterface, stopDataInterface } from "../../slices/dataTypes";
+import { LocationMarker } from "./locationMarker";
 import styles from "./mapComponent.module.scss";
+import { PolylineMarker } from "./polylineMarker";
 
 const MapComponent = () => {
-  const position = useSelector(getStopPosition);
+  const position: stopDataInterface = useSelector(getStopPosition);
   const polylineData = useSelector(getPolylineData);
-  console.log(polylineData);
+  const multipleStopsData = useSelector(getMultipleStopsData);
+  const [polyline, setPolyline] = useState<LocationInterface[][]>();
+  const [multipleStops, setMultipleStops] = useState<stopDataInterface>();
+
+  useEffect(() => {
+    setPolyline(polylineData);
+    setMultipleStops(multipleStopsData);
+  }, [polylineData, multipleStopsData]);
 
   return (
     <div className={styles.mapContainer}>
       <MapContainer
-        center={position}
+        center={{ lat: 42.6971, lng: 23.3226 }}
         zoom={13}
         scrollWheelZoom
-        style={{ height: "90%", width: "90%", display: "flex" }}
+        style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {position && (
-          <Marker position={position} key={position.lat}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+        {position && <LocationMarker />}
+        {polyline && (
+          <>
+            <PolylineMarker polyline={polyline} />
+            {multipleStops &&
+              Object.keys(multipleStops).map((currentStop) => (
+                <Marker position={multipleStops[currentStop]} key={uuidv4()}>
+                  <Popup>{currentStop}</Popup>
+                </Marker>
+              ))}
+          </>
         )}
-        {polylineData.length > 0 && (
-          <Polyline
-            pathOptions={{ color: "lime" }}
-            positions={polylineData[0]}
-          />
-        )}
-        <LocationMarker />
       </MapContainer>
     </div>
   );
